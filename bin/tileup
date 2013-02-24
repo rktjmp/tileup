@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+
+require 'tileup'
+require 'optparse'
+
+# auto zoom bigmap.png down 4 times, output to map-tiles dir with map-tile-X-Y.png filename
+# maw --in "bigmap.png" --auto-zoom --auto-zoom-levels 4 --output-dir "map-tiles" --filename-prefx="map-tile"
+
+# maw --in "bigmap.png" --output-dir "map-tiles/20/" --filename-prefix="map-tile" --tile-width 256 --tile-height 256
+
+
+options = {
+  tile_width: 256,
+  tile_height: 256,
+  filename_prefix: "map_tile",
+  auto_zoom_levels: nil,
+  input_filename: nil,
+  output_dir: '.'
+
+}
+
+OptionParser.new do |o|
+  o.on('--in=input_file', " Required input file, your large image to tile up") { |input_filename| options[:input_filename] = input_filename }
+  o.on('--prefix=map_tile', "Prefix to append to tile files, e.g. --prefix=my_tile => my_tile_[XN]_[YN].png") { |prefix| options[:filename_prefix] = prefix }
+  o.on('--tile-width=256', "Tile width, should normally equal tile height") { |width| options[:tile_width] = width }
+  o.on('--tile-height=256', "Tile height, should normally equal tile width") { |height| options[:tile_height] = height }
+  o.on('--auto-zoom=', Integer, "Automatically scale input image N times, must be a number"){ |zooms| options[:auto_zoom_levels] = zooms }
+  o.on('--output-dir=', "Output directory (will be created if it doesn't exist)") { |output_dir| options[:output_dir] = output_dir }
+  o.on('-h', '--help', "You're looking at it.") { puts o; exit }
+  begin
+    o.parse!
+  rescue Exception => e
+    puts "Argument error, #{e.message}. Try running '#{File.basename($PROGRAM_NAME)} -h'"
+    exit
+  end  
+end
+
+if options[:input_filename].nil?
+  puts "No input file specified, Try running '#{File.basename($PROGRAM_NAME)} -h'"
+  exit 1
+end
+
+TileUp::Tiler.new(options[:input_filename], options)
