@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name        = 'tileup'
-  s.version     = '0.0.1'
+  s.version     = '0.1.0'
   s.date        = '2013-02-23'
   s.summary     = "Turn an image into an X,Y tile set for use with JS mapping libraries"
-  s.description = "Turn an image into an X,Y tile set for use with JS mapping libraries"
+  s.description = s.summary
   s.authors     = ["Oliver Marriott"]
   s.email       = 'hello@omarriott.com'
   s.files       = ["lib/tileup.rb"]
