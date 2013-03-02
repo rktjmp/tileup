@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'tileup'
-  s.version     = '0.1.0'
+  s.version     = '0.1.1'
   s.date        = '2013-02-23'
   s.summary     = "Turn an image into an X,Y tile set for use with JS mapping libraries"
   s.description = s.summary
@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'hello@omarriott.com'
   s.files       = ["lib/tileup.rb"]
   s.homepage    =
-    'http://rubygems.org/gems/tileup'
+    'http://github.com/rktjmp/tileup'
   s.executables << 'tileup'
   s.add_runtime_dependency "rmagick", ["~> 2.13.2"]
 end
