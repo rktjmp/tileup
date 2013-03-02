@@ -1,7 +1,7 @@
 Tile Up
 =======
 
-*Tile Up* is a ruby Ruby gem that splits a large image into a set of tiles to use with javascript mapping libraries such as [Leaflet.js](http://leafletjs.com) or [Modest Maps](http://modestmaps.com/).
+*Tile Up* is a ruby Ruby gem that splits a large image into a set of tiles to use with javascript mapping libraries such as [Leaflet.js](http://leafletjs.com) or [Modest Maps](http://modestmaps.com/). You can also use *Tile Up* to make tiles for `CATiledLayer` (or anything else really...).
 
 Installation
 ------------
