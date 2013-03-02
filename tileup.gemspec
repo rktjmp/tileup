@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.email       = 'hello@omarriott.com'
   s.files       = ["lib/tileup.rb"]
   s.homepage    =
-    'http://rubygems.org/gems/tileup'
+    'http://github.com/rktjmp/tileup'
   s.executables << 'tileup'
   s.add_runtime_dependency "rmagick", ["~> 2.13.2"]
 end
