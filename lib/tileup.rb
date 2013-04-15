@@ -1,5 +1,6 @@
 require 'ostruct'
-require 'rmagick'
+require 'RMagick'
+require 'fileutils'
 
 module TileUp
 
@@ -15,11 +16,13 @@ module TileUp
         verbose: false
       }
       @options = OpenStruct.new(default_options.merge(options))
+      @options.tile_width = @options.tile_width.to_i unless !@options.tile_width.respond_to? :to_i
+      @options.tile_height = @options.tile_height.to_i unless !@options.tile_height.respond_to? :to_i
       @extension = image_filename.split(".").last
       @filename_prefix = @options.filename_prefix
 
       begin
-        @image = Magick::Image::read(image_filename).first        
+        @image = Magick::Image::read(image_filename).first
       rescue Magick::ImageMagickError => e
         puts "Could not open image #{image_filename}."
         exit
@@ -61,17 +64,17 @@ module TileUp
             output_dir: File.join(@options.output_dir, zoom_name.to_s),
             scale: scale
           }
-        end                
+        end
       end
 
       # run through tasks list
       tasks.each do |task|
         image = @image
         image_path = File.join(task[:output_dir], @filename_prefix)
-        if task[:scale] != 1.0 
+        if task[:scale] != 1.0
           # if scale required, scale image
           begin
-            image = @image.scale(task[:scale])  
+            image = @image.scale(task[:scale])
           rescue RuntimeError => e
             message = "Failed to scale image, are you sure the original image "\
                       "is large enough to scale down this far (#{scale}) with this "\
@@ -91,16 +94,12 @@ module TileUp
     end
 
     def make_path(directory_path)
-      parts = directory_path.split(File::SEPARATOR);
-      parts.each_index do |i|
-        upto = parts[0..i].join(File::SEPARATOR)
-        Dir::mkdir(upto) unless Dir::exists?(upto)
-      end
+      FileUtils.mkdir_p directory_path
     end
 
     def make_tiles(image, filename_prefix, tile_width, tile_height)
       # find image width and height
-      # then find out how many tiles we'll get out of 
+      # then find out how many tiles we'll get out of
       # the image, then use that for the xy offset in crop.
       num_columns = image.columns/tile_width
       num_rows = image.rows/tile_height
@@ -136,7 +135,7 @@ module TileUp
         ci = nil
       end
     end
-  
+
   end
 
 end
