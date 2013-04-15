@@ -101,8 +101,8 @@ module TileUp
       # find image width and height
       # then find out how many tiles we'll get out of
       # the image, then use that for the xy offset in crop.
-      num_columns = image.columns/tile_width
-      num_rows = image.rows/tile_height
+      num_columns = (image.columns/tile_width.to_f).ceil
+      num_rows = (image.rows/tile_height.to_f).ceil
       x,y,column,row = 0,0,0,0
       crops = []
 
