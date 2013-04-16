@@ -129,6 +129,11 @@ module TileUp
 
       crops.each do |c|
         ci = image.crop(c[:x], c[:y], tile_width, tile_height, true);
+
+        #pad last row and column - 0,0 should work for both
+        if c[:row] == num_rows - 1 || c[:column] == num_columns - 1
+          ci = ci.extent(tile_width, tile_height, 0, 0)
+        end
         print "Saving tile: #{c[:row]}, #{c[:column]}..." if @options.verbose
         ci.write("#{filename_prefix}_#{c[:column]}_#{c[:row]}.#{@extension}")
         print "\rSaving tile: #{c[:row]}, #{c[:column]}... saved\n" if @options.verbose
