@@ -13,6 +13,7 @@ module TileUp
         tile_height: 256,
         filename_prefix: "map_tile",
         output_dir: ".",
+        extend_incomplete_tiles: true,
         verbose: false
       }
       @options = OpenStruct.new(default_options.merge(options))
@@ -129,9 +130,18 @@ module TileUp
 
       crops.each do |c|
         ci = image.crop(c[:x], c[:y], tile_width, tile_height, true);
+
+        # unless told to do otherwise, extend tiles in the last row and column
+        # if they do not fill an entire tile width and height.
+        if @options.extend_incomplete_tiles && (c[:row] == num_rows - 1 || c[:column] == num_columns - 1)
+          # fill to width height, start from top left corner.
+          ci = ci.extent(tile_width, tile_height, 0, 0)
+        end
+
         print "Saving tile: #{c[:row]}, #{c[:column]}..." if @options.verbose
         ci.write("#{filename_prefix}_#{c[:column]}_#{c[:row]}.#{@extension}")
         print "\rSaving tile: #{c[:row]}, #{c[:column]}... saved\n" if @options.verbose
+
         ci = nil
       end
     end
