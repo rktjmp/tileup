@@ -69,5 +69,5 @@ Contributing
 Fixes and patches welcome, to contribute:
 
 1. Fork this project
-1. Create a feature or fix branch
+1. Create a feature or fix branch *off the develop branch*
 1. Submit a pull request on that branch
