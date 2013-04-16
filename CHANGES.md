@@ -1,7 +1,7 @@
 Tileup Change Log
 =================
 
-develop
+v0.1.3
 ------
 
 - Added functionality to automatically pad tiles that are not tile_width x tile_height
