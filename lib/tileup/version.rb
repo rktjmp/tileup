@@ -1,3 +1,3 @@
 module TileUp
-  VERSION = '0.1.4-pre'
+  VERSION = '0.1.4pre'
 end
