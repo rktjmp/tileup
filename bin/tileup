@@ -42,4 +42,9 @@ if options[:input_filename].nil?
   exit 1
 end
 
-TileUp::Tiler.new(options[:input_filename], options)
+begin
+  TileUp::Tiler.new(options[:input_filename], options)
+rescue Interrupt
+  puts "\n\nInterrupt received, exiting.\n"
+  exit
+end
