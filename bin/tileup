@@ -3,12 +3,6 @@
 require 'tileup'
 require 'optparse'
 
-# auto zoom bigmap.png down 4 times, output to map-tiles dir with map-tile-X-Y.png filename
-# maw --in "bigmap.png" --auto-zoom --auto-zoom-levels 4 --output-dir "map-tiles" --filename-prefx="map-tile"
-
-# maw --in "bigmap.png" --output-dir "map-tiles/20/" --filename-prefix="map-tile" --tile-width 256 --tile-height 256
-
-
 options = {
   tile_width: 256,
   tile_height: 256,
@@ -20,19 +14,24 @@ options = {
 }
 
 OptionParser.new do |o|
-  o.on('--in=input_file', " Required input file, your large image to tile up.") { |input_filename| options[:input_filename] = input_filename }
+  o.on('--in=input_file', "Required input file, your large image to tile up.") { |input_filename| options[:input_filename] = input_filename }
   o.on('--prefix=map_tile', "Prefix to append to tile files, e.g. --prefix=my_tile => my_tile_[XN]_[YN].png.") { |prefix| options[:filename_prefix] = prefix }
   o.on('--tile-width=256', "Tile width, should normally equal tile height.") { |width| options[:tile_width] = width }
   o.on('--tile-height=256', "Tile height, should normally equal tile width.") { |height| options[:tile_height] = height }
   o.on('--auto-zoom=', Integer, "Automatically scale input image N times, must be a number."){ |zooms| options[:auto_zoom_levels] = zooms }
   o.on('--output-dir=', "Output directory (will be created if it doesn't exist).") { |output_dir| options[:output_dir] = output_dir }
   o.on('--dont-extend-incomplete-tiles',
-       "Do not extend edge tiles if they do not fill an entire tile_width x tile_height. By default tileup will extend tiles to tile_width x tile_height if required.") {|e|options[:extend_incomplete_tiles] = false}
+       "Do not extend edge tiles if they do not fill an entire tile_width x tile_height. " +
+       "By default tileup will extend tiles to tile_width x tile_height if required.") {|e|options[:extend_incomplete_tiles] = false}
   o.on('-v', '--verbose', "Enable verbose logging.") { |verbose| options[:verbose] = true }
   o.on('-h', '--help', "You're looking at it.") { puts o; exit }
+  o.on('--version', "Version information (v#{TileUp::VERSION})") { puts TileUp::VERSION; exit }
   begin
     o.parse!
+  rescue SystemExit => e
+    exit
   rescue Exception => e
+    puts e.class
     puts "Argument error, #{e.message}. Try running '#{File.basename($PROGRAM_NAME)} -h'"
     exit
   end  
@@ -43,4 +42,9 @@ if options[:input_filename].nil?
   exit 1
 end
 
-TileUp::Tiler.new(options[:input_filename], options)
+begin
+  TileUp::Tiler.new(options[:input_filename], options)
+rescue Interrupt
+  puts "\n\nInterrupt received, exiting.\n"
+  exit
+end
