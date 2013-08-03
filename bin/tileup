@@ -27,7 +27,8 @@ OptionParser.new do |o|
   o.on('--auto-zoom=', Integer, "Automatically scale input image N times, must be a number."){ |zooms| options[:auto_zoom_levels] = zooms }
   o.on('--output-dir=', "Output directory (will be created if it doesn't exist).") { |output_dir| options[:output_dir] = output_dir }
   o.on('--dont-extend-incomplete-tiles',
-       "Do not extend edge tiles if they do not fill an entire tile_width x tile_height. By default tileup will extend tiles to tile_width x tile_height if required.") {|e|options[:extend_incomplete_tiles] = false}
+       "Do not extend edge tiles if they do not fill an entire tile_width x tile_height. " +
+       "By default tileup will extend tiles to tile_width x tile_height if required.") {|e|options[:extend_incomplete_tiles] = false}
   o.on('-v', '--verbose', "Enable verbose logging.") { |verbose| options[:verbose] = true }
   o.on('-h', '--help', "You're looking at it.") { puts o; exit }
   begin
