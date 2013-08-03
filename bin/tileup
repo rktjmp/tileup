@@ -3,12 +3,6 @@
 require 'tileup'
 require 'optparse'
 
-# auto zoom bigmap.png down 4 times, output to map-tiles dir with map-tile-X-Y.png filename
-# maw --in "bigmap.png" --auto-zoom --auto-zoom-levels 4 --output-dir "map-tiles" --filename-prefx="map-tile"
-
-# maw --in "bigmap.png" --output-dir "map-tiles/20/" --filename-prefix="map-tile" --tile-width 256 --tile-height 256
-
-
 options = {
   tile_width: 256,
   tile_height: 256,
