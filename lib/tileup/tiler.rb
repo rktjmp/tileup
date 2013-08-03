@@ -131,7 +131,7 @@ module TileUp
       end
 
       crops.each do |c|
-        @logger.info "crop #{c[:x]} #{c[:y]}, #{tile_width}, #{tile_height}\n"
+        @logger.verbose "Crop: x: #{c[:x]}, y: #{c[:y]}, w: #{tile_width}, h: #{tile_height}"
         ci = image.crop(c[:x], c[:y], tile_width, tile_height, true);
 
         # unless told to do otherwise, extend tiles in the last row and column
@@ -149,7 +149,7 @@ module TileUp
 
         @logger.verbose "Saving tile: #{c[:row]}, #{c[:column]}..."
         ci.write("#{filename_prefix}_#{c[:column]}_#{c[:row]}.#{@extension}")
-        @logger.verbose "\rSaving tile: #{c[:row]}, #{c[:column]}... saved\n"
+        @logger.verbose "Saving tile: #{c[:row]}, #{c[:column]}... saved"
 
         ci = nil
       end
