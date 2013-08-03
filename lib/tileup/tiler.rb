@@ -1,6 +1,7 @@
 require 'ostruct'
 require 'RMagick'
 require 'fileutils'
+require 'tileup/logger'
 
 module TileUp
 
@@ -21,23 +22,24 @@ module TileUp
       @options.tile_height = @options.tile_height.to_i unless !@options.tile_height.respond_to? :to_i
       @extension = image_filename.split(".").last
       @filename_prefix = @options.filename_prefix
+      @logger = ConsoleLogger.new(:info, {verbose: @options.verbose})
 
       begin
         @image = Magick::Image::read(image_filename).first
       rescue Magick::ImageMagickError => e
-        puts "Could not open image #{image_filename}."
+        @logger.error "Could not open image #{image_filename}."
         exit
       end
 
       if @options.auto_zoom_levels && @options.auto_zoom_levels > 20
-        puts "Warning: auto zoom levels hard limited to 20."
+        @logger.warn "Warning: auto zoom levels hard limited to 20."
         @options.auto_zoom_levels = 20
       end
       if @options.auto_zoom_levels && @options.auto_zoom_levels <= 0
         @options.auto_zoom_levels = nil
       end
 
-      puts "Opened #{image_filename}, #{@image.columns} x #{@image.rows}"
+      @logger.info "Opened #{image_filename}, #{@image.columns} x #{@image.rows}"
 
       # pre-process our inputs to work out what we're supposed to do
       tasks = []
@@ -80,7 +82,7 @@ module TileUp
             message = "Failed to scale image, are you sure the original image "\
                       "is large enough to scale down this far (#{scale}) with this "\
                       "tilesize (#{@options.tile_width}x#{@options.tile_height})?"
-            puts message
+            @logger.error message
             exit
           end
         end
@@ -90,7 +92,7 @@ module TileUp
         image = nil
       end
 
-      puts "Finished."
+      @logger.info "Finished."
 
     end
 
@@ -107,7 +109,7 @@ module TileUp
       x,y,column,row = 0,0,0,0
       crops = []
 
-      puts "Tiling image into columns: #{num_columns}, rows: #{num_rows}"
+      @logger.info "Tiling image into columns: #{num_columns}, rows: #{num_rows}"
 
       while true
         x = column * tile_width
@@ -129,7 +131,7 @@ module TileUp
       end
 
       crops.each do |c|
-        print "crop #{c[:x]} #{c[:y]}, #{tile_width}, #{tile_height}\n"
+        @logger.info "crop #{c[:x]} #{c[:y]}, #{tile_width}, #{tile_height}\n"
         ci = image.crop(c[:x], c[:y], tile_width, tile_height, true);
 
         # unless told to do otherwise, extend tiles in the last row and column
@@ -145,9 +147,9 @@ module TileUp
           ci = ci.extent(tile_width, tile_height, 0, 0)
         end
 
-        print "Saving tile: #{c[:row]}, #{c[:column]}..." if @options.verbose
+        @logger.verbose "Saving tile: #{c[:row]}, #{c[:column]}..."
         ci.write("#{filename_prefix}_#{c[:column]}_#{c[:row]}.#{@extension}")
-        print "\rSaving tile: #{c[:row]}, #{c[:column]}... saved\n" if @options.verbose
+        @logger.verbose "\rSaving tile: #{c[:row]}, #{c[:column]}... saved\n"
 
         ci = nil
       end
