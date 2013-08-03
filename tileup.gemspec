@@ -6,7 +6,7 @@ require 'tileup/version'
 Gem::Specification.new do |spec|
   spec.name        = 'tileup'
   spec.version     = TileUp::VERSION
-  spec.date        = '2013-04-16'
+  spec.date        = Date.today.to_s
   spec.summary     = "Turn an image into an X,Y tile set for use with JS mapping libraries"
   spec.description = spec.summary
   spec.authors     = ["Oliver Marriott"]
