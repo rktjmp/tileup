@@ -147,9 +147,9 @@ module TileUp
           ci = ci.extent(tile_width, tile_height, 0, 0)
         end
 
-        @logger.verbose "Saving tile: #{c[:row]}, #{c[:column]}..."
+        @logger.verbose "Saving tile: #{c[:column]}, #{c[:row]}..."
         ci.write("#{filename_prefix}_#{c[:column]}_#{c[:row]}.#{@extension}")
-        @logger.verbose "Saving tile: #{c[:row]}, #{c[:column]}... saved"
+        @logger.verbose "Saving tile: #{c[:column]}, #{c[:row]}... saved"
 
         ci = nil
       end
